@@ -1,8 +1,0 @@
-It is possible to make kchmviewer a portable app, meaning it would keep its files in predefined location and will not write into system/user folders.
-
-To do this, please create a directory named "portable" (without quotes) in the same directory where kchmviewer binary is stored. If this directory exists:
-
-- Subdirectory "data" will be created under "portable" and will be used to store the search index and per-help file preferences;
-- Application settings will be stored in subdirectory "Ulduzsoft" created in "portable"
-- Qt-specific settings will be stored in "portable" directory
-- Nothing will be written into any other location on disk.
