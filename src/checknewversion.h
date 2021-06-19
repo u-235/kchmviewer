@@ -53,11 +53,11 @@
 #include <QMetaType>
 #include <QMap>
 
-typedef QMap<QString,QString>	NewVersionMetaMap;
+typedef QMap<QString, QString>	NewVersionMetaMap;
 
 class CheckNewVersion : public QThread
 {
-	Q_OBJECT
+		Q_OBJECT
 
 	public:
 		enum
@@ -124,6 +124,6 @@ class CheckNewVersion : public QThread
 		QByteArray      m_inputBuffer;	// for socket input
 };
 
-Q_DECLARE_METATYPE(NewVersionMetaMap);
+Q_DECLARE_METATYPE( NewVersionMetaMap );
 
 #endif // CHECKNEWVERSION_H

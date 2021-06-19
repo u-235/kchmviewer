@@ -20,8 +20,8 @@
 
 typedef struct
 {
-	const char * language;
-	const char * qtcodec;
+	const char* language;
+	const char* qtcodec;
 } TextEncodingEntry;
 
 static const TextEncodingEntry text_encoding_table [] =
@@ -174,18 +174,18 @@ TextEncodings::TextEncodings()
 {
 }
 
-void TextEncodings::getSupported(QStringList &languages, QStringList &qtcodecs)
+void TextEncodings::getSupported( QStringList& languages, QStringList& qtcodecs )
 {
-	for ( const TextEncodingEntry * e = text_encoding_table; e->language; e++ )
+	for ( const TextEncodingEntry* e = text_encoding_table; e->language; e++ )
 	{
 		languages.push_back( e->language );
 		qtcodecs.push_back( e->qtcodec );
 	}
 }
 
-QString TextEncodings::languageForCodec(const QString &qtcodec)
+QString TextEncodings::languageForCodec( const QString& qtcodec )
 {
-	for ( const TextEncodingEntry * e = text_encoding_table; e->language; e++ )
+	for ( const TextEncodingEntry* e = text_encoding_table; e->language; e++ )
 	{
 		if ( e->qtcodec == qtcodec )
 			return e->language;

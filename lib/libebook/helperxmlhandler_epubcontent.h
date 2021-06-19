@@ -49,9 +49,10 @@ class HelperXmlHandler_EpubContent : public QXmlDefaultHandler
 			STATE_IN_SPINE
 		};
 
-		bool startElement ( const QString & namespaceURI, const QString & localName, const QString & qName, const QXmlAttributes & atts );
-		bool characters(const QString &ch);
-		bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
+		bool startElement ( const QString& namespaceURI, const QString& localName, const QString& qName,
+							const QXmlAttributes& atts );
+		bool characters( const QString& ch );
+		bool endElement( const QString& namespaceURI, const QString& localName, const QString& qName );
 
 		// Tracking
 		State		m_state;

@@ -32,30 +32,30 @@
 #endif
 
 #if defined (Q_WS_MAC)
-        #include "kchmviewerapp.h"
+	#include "kchmviewerapp.h"
 #else
-        typedef QApplication  KchmviewerApp;
+	typedef QApplication  KchmviewerApp;
 #endif
 
-MainWindow * mainWindow;
+MainWindow* mainWindow;
 
 
-int main( int argc, char ** argv )
+int main( int argc, char** argv )
 {
 #if defined (USE_KDE)
-    KAboutData aboutdata ( "kchmviewer",
-                           QByteArray(),
-                           ki18n("kchmviewer"),
-                           qPrintable( QString("%1.%2") .arg(APP_VERSION_MAJOR) .arg(APP_VERSION_MINOR) ),
-                           ki18n("CHM file viewer"),
-                           KAboutData::License_GPL,
-                           ki18n("(c) 2004-2015 George Yunaev, gyunaev@ulduzsoft.com"),
-                           ki18n("Please report bugs to kchmviewer@ulduzsoft.com"),
-                           "http://www.ulduzsoft.com/kchmviewer",
-                           "kchmviewer@ulduzsoft.com");
+	KAboutData aboutdata ( "kchmviewer",
+						   QByteArray(),
+						   ki18n( "kchmviewer" ),
+						   qPrintable( QString( "%1.%2" ) .arg( APP_VERSION_MAJOR ) .arg( APP_VERSION_MINOR ) ),
+						   ki18n( "CHM file viewer" ),
+						   KAboutData::License_GPL,
+						   ki18n( "(c) 2004-2015 George Yunaev, gyunaev@ulduzsoft.com" ),
+						   ki18n( "Please report bugs to kchmviewer@ulduzsoft.com" ),
+						   "http://www.ulduzsoft.com/kchmviewer",
+						   "kchmviewer@ulduzsoft.com" );
 
-    KCmdLineArgs::init( &aboutdata );
-    KApplication app;
+	KCmdLineArgs::init( &aboutdata );
+	KApplication app;
 #else
 	KchmviewerApp app( argc, argv );
 
@@ -63,19 +63,20 @@ int main( int argc, char ** argv )
 #endif
 
 	// Set data for QSettings
-	QCoreApplication::setOrganizationName("Ulduzsoft");
-	QCoreApplication::setOrganizationDomain("kchmviewer.net");
-	QCoreApplication::setApplicationName("kchmviewer");
+	QCoreApplication::setOrganizationName( "Ulduzsoft" );
+	QCoreApplication::setOrganizationDomain( "kchmviewer.net" );
+	QCoreApplication::setApplicationName( "kchmviewer" );
 
 	// Configuration
 	pConfig = new Config();
 
 #if !defined (WIN32) && !defined(Q_WS_MAC)
+
 	if ( QDBusConnection::sessionBus().isConnected() )
 	{
-		if ( QDBusConnection::sessionBus().registerService(SERVICE_NAME) )
+		if ( QDBusConnection::sessionBus().registerService( SERVICE_NAME ) )
 		{
-			DBusInterface * dbusiface = new DBusInterface();
+			DBusInterface* dbusiface = new DBusInterface();
 			QDBusConnection::sessionBus().registerObject( "/", dbusiface, QDBusConnection::ExportAllSlots );
 		}
 		else
@@ -83,29 +84,30 @@ int main( int argc, char ** argv )
 	}
 	else
 		qWarning( "Cannot connect to the D-BUS session bus. Going without D-BUS support." );
+
 #endif
 
 #if defined (USE_KDE)
-    // Because KDE insists of using its KCmdLineArgs class for argument processing, and does not let you just
-    // to use QCoreApplication::arguments(), it forces us to write two different process functions. To avoid this,
-    // we convert command-line options to arguments ourselves here.
-    QStringList arguments;
+	// Because KDE insists of using its KCmdLineArgs class for argument processing, and does not let you just
+	// to use QCoreApplication::arguments(), it forces us to write two different process functions. To avoid this,
+	// we convert command-line options to arguments ourselves here.
+	QStringList arguments;
 
-    for ( int i = 0; i < argc; i++ )
-        arguments << argv[i];
+	for ( int i = 0; i < argc; i++ )
+		arguments << argv[i];
 
-    mainWindow = new MainWindow( arguments );
+	mainWindow = new MainWindow( arguments );
 #else
-    mainWindow = new MainWindow( QCoreApplication::arguments() );
+	mainWindow = new MainWindow( QCoreApplication::arguments() );
 #endif
 
-    // If we already have the duplicate instance, the data has been already sent to it - quit now
-    if ( mainWindow->hasSameTokenInstance() )
-        return 0;
+	// If we already have the duplicate instance, the data has been already sent to it - quit now
+	if ( mainWindow->hasSameTokenInstance() )
+		return 0;
 
 	mainWindow->show();
-    mainWindow->launch();
+	mainWindow->launch();
 
-	app.connect( &app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()) );
+	app.connect( &app, SIGNAL( lastWindowClosed() ), &app, SLOT( quit() ) );
 	return app.exec();
 }

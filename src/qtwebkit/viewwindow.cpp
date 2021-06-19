@@ -34,7 +34,7 @@
 static const qreal ZOOM_FACTOR_CHANGE = 0.1;
 
 
-ViewWindow::ViewWindow( QWidget * parent )
+ViewWindow::ViewWindow( QWidget* parent )
 	: QWebView ( parent )
 {
 	invalidate();
@@ -43,18 +43,18 @@ ViewWindow::ViewWindow( QWidget * parent )
 	m_storedScrollbarPosition = 0;
 
 	// Use our network emulation layer
-	page()->setNetworkAccessManager( new KCHMNetworkAccessManager(this) );
+	page()->setNetworkAccessManager( new KCHMNetworkAccessManager( this ) );
 
 	// All links are going through us
 	page()->setLinkDelegationPolicy( QWebPage::DelegateAllLinks );
 
-	connect( this, SIGNAL( loadFinished(bool)), this, SLOT( onLoadFinished(bool)) );
+	connect( this, SIGNAL( loadFinished( bool ) ), this, SLOT( onLoadFinished( bool ) ) );
 
-    // Search results highlighter
-    QPalette pal = palette();
-    pal.setColor( QPalette::Inactive, QPalette::Highlight, pal.color(QPalette::Active, QPalette::Highlight) );
-    pal.setColor( QPalette::Inactive, QPalette::HighlightedText, pal.color(QPalette::Active, QPalette::HighlightedText) );
-    setPalette( pal );
+	// Search results highlighter
+	QPalette pal = palette();
+	pal.setColor( QPalette::Inactive, QPalette::Highlight, pal.color( QPalette::Active, QPalette::Highlight ) );
+	pal.setColor( QPalette::Inactive, QPalette::HighlightedText, pal.color( QPalette::Active, QPalette::HighlightedText ) );
+	setPalette( pal );
 }
 
 ViewWindow::~ViewWindow()
@@ -70,7 +70,7 @@ void ViewWindow::invalidate( )
 
 bool ViewWindow::openUrl ( const QUrl& url )
 {
-    //qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
+	//qDebug("ViewWindow::openUrl %s", qPrintable(url.toString()));
 
 	// Do not use setContent() here, it resets QWebHistory
 	load( url );
@@ -78,41 +78,41 @@ bool ViewWindow::openUrl ( const QUrl& url )
 	m_newTabLinkKeeper.clear();
 	mainWindow->viewWindowMgr()->setTabName( this );
 
-    return true;
+	return true;
 }
 
 void ViewWindow::applySettings()
 {
-    QWebSettings * setup = QWebSettings::globalSettings();
+	QWebSettings* setup = QWebSettings::globalSettings();
 
-    setup->setAttribute( QWebSettings::AutoLoadImages, pConfig->m_browserEnableImages );
-    setup->setAttribute( QWebSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
-    setup->setAttribute( QWebSettings::JavaEnabled, pConfig->m_browserEnableJava );
-    setup->setAttribute( QWebSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
-    setup->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
-    setup->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
-    setup->setAttribute( QWebSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
+	setup->setAttribute( QWebSettings::AutoLoadImages, pConfig->m_browserEnableImages );
+	setup->setAttribute( QWebSettings::JavascriptEnabled, pConfig->m_browserEnableJS );
+	setup->setAttribute( QWebSettings::JavaEnabled, pConfig->m_browserEnableJava );
+	setup->setAttribute( QWebSettings::PluginsEnabled, pConfig->m_browserEnablePlugins );
+	setup->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, pConfig->m_browserEnableOfflineStorage );
+	setup->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, pConfig->m_browserEnableLocalStorage );
+	setup->setAttribute( QWebSettings::LocalStorageEnabled, pConfig->m_browserEnableLocalStorage );
 }
 
-QMenu * ViewWindow::createStandardContextMenu( QWidget * parent )
+QMenu* ViewWindow::createStandardContextMenu( QWidget* parent )
 {
-	QMenu * contextMenu = new QMenu( parent );
-	
-	contextMenu->addAction( "&Copy", ::mainWindow, SLOT(slotBrowserCopy()) );
-	contextMenu->addAction( "&Select all", ::mainWindow, SLOT(slotBrowserSelectAll()) );
-		
+	QMenu* contextMenu = new QMenu( parent );
+
+	contextMenu->addAction( "&Copy", ::mainWindow, SLOT( slotBrowserCopy() ) );
+	contextMenu->addAction( "&Select all", ::mainWindow, SLOT( slotBrowserSelectAll() ) );
+
 	return contextMenu;
 }
 
 
-QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
+QMenu* ViewWindow::getContextMenu( const QUrl& link, QWidget* parent )
 {
 	if ( link.isEmpty() )
 	{
 		// standard context menu
 		if ( !m_contextMenu )
 			m_contextMenu = createStandardContextMenu( parent );
-		
+
 		return m_contextMenu;
 	}
 	else
@@ -123,12 +123,14 @@ QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
 		{
 			m_contextMenuLink = createStandardContextMenu( parent );
 			m_contextMenuLink->addSeparator();
-			
-			m_contextMenuLink->addAction( "&Open this link in a new tab", ::mainWindow, SLOT(onOpenPageInNewTab()), QKeySequence("Shift+Enter") );
-			
-			m_contextMenuLink->addAction( "&Open this link in a new background tab", ::mainWindow, SLOT(onOpenPageInNewBackgroundTab()), QKeySequence("Ctrl+Enter") );
+
+			m_contextMenuLink->addAction( "&Open this link in a new tab", ::mainWindow, SLOT( onOpenPageInNewTab() ),
+										  QKeySequence( "Shift+Enter" ) );
+
+			m_contextMenuLink->addAction( "&Open this link in a new background tab", ::mainWindow,
+										  SLOT( onOpenPageInNewBackgroundTab() ), QKeySequence( "Ctrl+Enter" ) );
 		}
-		
+
 		setTabKeeper( link );
 		return m_contextMenuLink;
 	}
@@ -137,11 +139,11 @@ QMenu * ViewWindow::getContextMenu( const QUrl & link, QWidget * parent )
 QString ViewWindow::title() const
 {
 	QString title = ::mainWindow->chmFile()->getTopicByUrl( url() );
-	
+
 	// If no title is found, use the path (without the first /)
 	if ( title.isEmpty() )
 		title = url().path().mid( 1 );
-	
+
 	return title;
 }
 
@@ -173,17 +175,17 @@ bool ViewWindow::printCurrentPage()
 
 	if ( dlg.exec() != QDialog::Accepted )
 	{
-		::mainWindow->showInStatusBar( i18n( "Printing aborted") );
+		::mainWindow->showInStatusBar( i18n( "Printing aborted" ) );
 		return false;
 	}
 
 	print( &printer );
-	::mainWindow->showInStatusBar( i18n( "Printing finished") );
+	::mainWindow->showInStatusBar( i18n( "Printing finished" ) );
 
 	return true;
 }
 
-void ViewWindow::setZoomFactor(qreal zoom)
+void ViewWindow::setZoomFactor( qreal zoom )
 {
 	QWebView::setZoomFactor( zoom );
 }
@@ -208,7 +210,7 @@ int ViewWindow::getScrollbarPosition()
 	return page()->currentFrame()->scrollBarValue( Qt::Vertical );
 }
 
-void ViewWindow::setScrollbarPosition(int pos, bool force)
+void ViewWindow::setScrollbarPosition( int pos, bool force )
 {
 	if ( !force )
 		m_storedScrollbarPosition = pos;
@@ -235,7 +237,7 @@ void ViewWindow::updateHistoryIcons()
 	}
 }
 
-QUrl ViewWindow::anchorAt(const QPoint & pos)
+QUrl ViewWindow::anchorAt( const QPoint& pos )
 {
 	QWebHitTestResult res = page()->currentFrame()->hitTestContent( pos );
 
@@ -246,7 +248,7 @@ QUrl ViewWindow::anchorAt(const QPoint & pos)
 }
 
 
-void ViewWindow::mouseReleaseEvent ( QMouseEvent * event )
+void ViewWindow::mouseReleaseEvent ( QMouseEvent* event )
 {
 	if ( event->button() == Qt::MidButton )
 	{
@@ -264,16 +266,17 @@ void ViewWindow::mouseReleaseEvent ( QMouseEvent * event )
 }
 
 
-void ViewWindow::contextMenuEvent(QContextMenuEvent *e)
+void ViewWindow::contextMenuEvent( QContextMenuEvent* e )
 {
 	// From Qt Assistant
-	QMenu *m = new QMenu(0);
+	QMenu* m = new QMenu( 0 );
 	QUrl link = anchorAt( e->pos() );
 
 	if ( !link.isEmpty() )
 	{
-		m->addAction( i18n("Open Link in a new tab\tShift+LMB"), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
-		m->addAction( i18n("Open Link in a new background tab\tCtrl+LMB"), ::mainWindow, SLOT( onOpenPageInNewBackgroundTab() ) );
+		m->addAction( i18n( "Open Link in a new tab\tShift+LMB" ), ::mainWindow, SLOT( onOpenPageInNewTab() ) );
+		m->addAction( i18n( "Open Link in a new background tab\tCtrl+LMB" ), ::mainWindow,
+					  SLOT( onOpenPageInNewBackgroundTab() ) );
 		m->addSeparator();
 		setTabKeeper( link );
 	}
@@ -293,5 +296,5 @@ void ViewWindow::onLoadFinished ( bool )
 
 	updateHistoryIcons();
 
-    emit dataLoaded( this );
+	emit dataLoaded( this );
 }

@@ -28,13 +28,13 @@
 class KCHMNetworkReply : public QNetworkReply
 {
 	public:
-		KCHMNetworkReply( const QNetworkRequest &request, const QUrl &url );
+		KCHMNetworkReply( const QNetworkRequest& request, const QUrl& url );
 		virtual qint64 bytesAvailable() const;
 		virtual void abort();
 
 	protected:
-		virtual qint64 readData(char *buffer, qint64 maxlen);
-		QByteArray loadResource( const QUrl &url );
+		virtual qint64 readData( char* buffer, qint64 maxlen );
+		QByteArray loadResource( const QUrl& url );
 
 	private:
 		QByteArray	m_data;
@@ -48,10 +48,10 @@ class KCHMNetworkReply : public QNetworkReply
 class KCHMNetworkAccessManager : public QNetworkAccessManager
 {
 	public:
-		KCHMNetworkAccessManager( QObject *parent );
+		KCHMNetworkAccessManager( QObject* parent );
 
 	protected:
-		virtual QNetworkReply *createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData = 0);
+		virtual QNetworkReply* createRequest( Operation op, const QNetworkRequest& request, QIODevice* outgoingData = 0 );
 };
 
 

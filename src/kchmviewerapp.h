@@ -24,11 +24,11 @@
 
 class KchmviewerApp : public QApplication
 {
-    Q_OBJECT
+		Q_OBJECT
 	public:
-		KchmviewerApp(int &argc, char **argv, int version= QT_VERSION);
+		KchmviewerApp( int& argc, char** argv, int version = QT_VERSION );
 		virtual ~KchmviewerApp();
-		bool event(QEvent*);
+		bool event( QEvent* );
 
 	private slots:
 		void onTimer();

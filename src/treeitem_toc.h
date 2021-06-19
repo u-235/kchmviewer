@@ -28,7 +28,7 @@ class TreeItem_TOC : public QTreeWidgetItem
 		TreeItem_TOC( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QUrl& url, int image );
 
 		QUrl		getUrl() const;
-		bool		containstUrl(const QUrl& url , bool ignorefragment ) const;
+		bool		containstUrl( const QUrl& url, bool ignorefragment ) const;
 
 		// Overridden methods
 		int 		columnCount () const;

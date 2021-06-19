@@ -24,8 +24,10 @@
 class TreeItem_Index : public QTreeWidgetItem
 {
 	public:
-		TreeItem_Index( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, const QString& seealso );
-		TreeItem_Index( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls, const QString& seealso );
+		TreeItem_Index( QTreeWidgetItem* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls,
+						const QString& seealso );
+		TreeItem_Index( QTreeWidget* parent, QTreeWidgetItem* after, const QString& name, const QList<QUrl>& urls,
+						const QString& seealso );
 
 		QUrl		getUrl() const;
 		bool		containstUrl( const QUrl& url ) const;

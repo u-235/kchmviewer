@@ -25,18 +25,18 @@
 
 class DialogChooseUrlFromList : public QDialog, public Ui::DialogTopicSelector
 {
-	Q_OBJECT
-	
+		Q_OBJECT
+
 	public:
 		DialogChooseUrlFromList( QWidget* parent );
-		
+
 		// Shows the dialog with titles, and let the user to select the title.
 		// Obviously urls.size() == titles.size(). Returns the appropriate URL
 		// for the selected title, or empty string if no title selected, or dialog canceled.
 		QUrl getSelectedItemUrl( const QList<QUrl>& urls, const QStringList& titles );
 
 	private slots:
-		void onDoubleClicked( QListWidgetItem * item );
+		void onDoubleClicked( QListWidgetItem* item );
 };
 
 #endif

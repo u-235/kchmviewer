@@ -28,7 +28,7 @@ class EBook;
 // This class shows content, index, search and bookmark tabs
 class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 {
-	Q_OBJECT
+		Q_OBJECT
 
 	public:
 		enum
@@ -39,20 +39,20 @@ class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 			TAB_BOOKMARK
 		};
 
-		NavigationPanel( QWidget * parent );
+		NavigationPanel( QWidget* parent );
 
 		// Sets the bookmark menu (maintained by bookmark tab)
-		void	setBookmarkMenu( QMenu * menu );
+		void	setBookmarkMenu( QMenu* menu );
 
 		// Invalidate data in all tabs
 		void	invalidate();
 
 		// Update tabs content from CHM file data
-		void	updateTabs(EBook *file );
+		void	updateTabs( EBook* file );
 
 		// Save/load current file settings
-		void	applySettings( Settings * settings );
-		void	getSettings( Settings * settings );
+		void	applySettings( Settings* settings );
+		void	getSettings( Settings* settings );
 
 		// Active tab get/set
 		int		active() const;
@@ -62,8 +62,8 @@ class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 		void	refresh();
 
 		// Locate URL or text in the contents tab
-        bool	findUrlInContents( const QUrl & url );
-		void	findTextInContents( const QString & text );
+		bool	findUrlInContents( const QUrl& url );
+		void	findTextInContents( const QString& text );
 
 		// Find text in index tab
 		void	findInIndex( const QString& text );
@@ -83,10 +83,10 @@ class NavigationPanel : public QDockWidget, public Ui::NavigatorPanel
 		void	showNextInToc();
 
 	private:
-		TabContents			*	m_contentsTab;
-		TabIndex			*	m_indexTab;
-		TabSearch			*	m_searchTab;
-		TabBookmarks		*	m_bookmarksTab;
+		TabContents*				m_contentsTab;
+		TabIndex*				m_indexTab;
+		TabSearch*				m_searchTab;
+		TabBookmarks*			m_bookmarksTab;
 };
 
 #endif // NAVIGATIONPANEL_H

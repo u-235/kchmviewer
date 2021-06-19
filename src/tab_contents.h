@@ -26,24 +26,24 @@
 
 class TabContents : public QWidget, public Ui::TabContents
 {
-	Q_OBJECT
+		Q_OBJECT
 	public:
-		TabContents( QWidget *parent = 0 );
+		TabContents( QWidget* parent = 0 );
 		~TabContents();
-		
+
 		void	refillTableOfContents();
-		void	showItem( TreeItem_TOC * item );
+		void	showItem( TreeItem_TOC* item );
 		void	search( const QString& text );
 		void	focus();
-		
-		TreeItem_TOC *	getTreeItem(const QUrl &url );
-		
+
+		TreeItem_TOC* 	getTreeItem( const QUrl& url );
+
 	public slots:
-		void	onContextMenuRequested ( const QPoint &point );
-		void	onClicked ( QTreeWidgetItem * item, int column );
-	
+		void	onContextMenuRequested ( const QPoint& point );
+		void	onClicked ( QTreeWidgetItem* item, int column );
+
 	private:
-		QMenu 	*	m_contextMenu;
+		QMenu* 		m_contextMenu;
 };
 
 

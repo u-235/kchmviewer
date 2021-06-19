@@ -38,46 +38,52 @@ struct Document
 {
 	Document( int d, int f ) : docNumber( d ), frequency( f ) {}
 	Document() : docNumber( -1 ), frequency( 0 ) {}
-	bool operator==( const Document &doc ) const
+	bool operator==( const Document& doc ) const
 	{
 		return docNumber == doc.docNumber;
 	}
-	
-	bool operator<( const Document &doc ) const
+
+	bool operator<( const Document& doc ) const
 	{
 		return frequency > doc.frequency;
 	}
-	
-	bool operator<=( const Document &doc ) const
+
+	bool operator<=( const Document& doc ) const
 	{
 		return frequency >= doc.frequency;
 	}
-	
-	bool operator>( const Document &doc ) const
+
+	bool operator>( const Document& doc ) const
 	{
 		return frequency < doc.frequency;
 	}
-	
+
 	qint16	docNumber;
 	qint16	frequency;
 };
 
-QDataStream &operator>>( QDataStream &s, Document &l );
-QDataStream &operator<<( QDataStream &s, const Document &l );
+QDataStream& operator>>( QDataStream& s, Document& l );
+QDataStream& operator<<( QDataStream& s, const Document& l );
 
 class Index : public QObject
 {
-    Q_OBJECT
+		Q_OBJECT
 	public:
 
 		Index();
-		
+
 		void 		writeDict( QDataStream& stream );
 		bool 		readDict( QDataStream& stream );
-		bool 		makeIndex(const QList<QUrl> &docs, EBook * chmFile );
-		QList<QUrl>	query( const QStringList&, const QStringList&, const QStringList&, EBook * chmFile );
-		QString 	getCharsSplit() const { return m_charssplit; }
-		QString 	getCharsPartOfWord() const { return m_charsword; }
+		bool 		makeIndex( const QList<QUrl>& docs, EBook* chmFile );
+		QList<QUrl>	query( const QStringList&, const QStringList&, const QStringList&, EBook* chmFile );
+		QString 	getCharsSplit() const
+		{
+			return m_charssplit;
+		}
+		QString 	getCharsPartOfWord() const
+		{
+			return m_charsword;
+		}
 
 	signals:
 		void indexingProgress( int, const QString& );
@@ -88,33 +94,40 @@ class Index : public QObject
 	private:
 		struct Entry
 		{
-			Entry( int d ) { documents.append( Document( d, 1 ) ); }
+			Entry( int d )
+			{
+				documents.append( Document( d, 1 ) );
+			}
 			Entry( QVector<Document> l ) : documents( l ) {}
 			QVector<Document> documents;
 		};
-		
+
 		struct PosEntry
 		{
-			PosEntry( int p ) { positions.append( p ); }
+			PosEntry( int p )
+			{
+				positions.append( p );
+			}
 			QList<uint> positions;
 		};
-		
-		bool	parseDocumentToStringlist( EBook * chmFile, const QUrl& filename, QStringList& tokenlist );
+
+		bool	parseDocumentToStringlist( EBook* chmFile, const QUrl& filename, QStringList& tokenlist );
 		void	insertInDict( const QString&, int );
-		
+
 		QStringList				getWildcardTerms( const QString& );
 		QStringList				split( const QString& );
 		QList<Document> 		setupDummyTerm( const QStringList& );
-		bool 					searchForPhrases(const QStringList &phrases, const QStringList &words, const QUrl &filename, EBook * chmFile );
-		
+		bool 					searchForPhrases( const QStringList& phrases, const QStringList& words, const QUrl& filename,
+				EBook* chmFile );
+
 		QList< QUrl > 			docList;
 		QHash<QString, Entry*> 	dict;
-		QHash<QString,PosEntry*>miniDict;
+		QHash<QString, PosEntry*>miniDict;
 		bool 					lastWindowClosed;
 		HelperEntityDecoder		entityDecoder;
-	
+
 		// Those characters are splitters (i.e. split the word), but added themselves into dictionary too.
-		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both 
+		// This makes the dictionary MUCH larger, but ensure that for the piece of "window->print" both
 		// search for "print" and "->print" will find it.
 		QString 				m_charssplit;
 

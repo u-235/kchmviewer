@@ -59,7 +59,7 @@ class EBookIndexEntry
 		QString		name;
 
 		//! Entry URLs. The index entry could have several URLs
-        QList<QUrl> urls;
+		QList<QUrl> urls;
 
 		//! Whether this is a 'see also' index type, and its value
 		QString		seealso;
@@ -73,14 +73,14 @@ class EBookIndexEntry
 class EBook
 {
 	public:
-        enum Feature
-        {
-            FEATURE_TOC,        // has table of contents
-            FEATURE_INDEX,      // has index
-            FEATURE_ENCODING    // Could be encoded with different encodings
-        };
+		enum Feature
+		{
+			FEATURE_TOC,        // has table of contents
+			FEATURE_INDEX,      // has index
+			FEATURE_ENCODING    // Could be encoded with different encodings
+		};
 
-        //! Default constructor and destructor.
+		//! Default constructor and destructor.
 		EBook();
 		virtual ~EBook();
 
@@ -93,7 +93,7 @@ class EBook
 		 * if files linked to this one are present locally (like MSDN).
 		 * \ingroup init
 		 */
-		static EBook * loadFile( const QString& archiveName );
+		static EBook* loadFile( const QString& archiveName );
 
 		/*!
 		 * \brief Closes all the files, and frees the appropriate data.
@@ -118,11 +118,11 @@ class EBook
 		virtual QUrl homeUrl() const = 0;
 
 		/*!
-         * \brief Checks whether the specific feature is present in this file.
+		 * \brief Checks whether the specific feature is present in this file.
 		 * \return true if it is available; false otherwise.
 		 * \ingroup information
 		 */
-        virtual bool  hasFeature( Feature code ) const = 0;
+		virtual bool  hasFeature( Feature code ) const = 0;
 
 		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
@@ -195,8 +195,8 @@ class EBook
 		virtual QString		getTopicByUrl ( const QUrl& url ) = 0;
 
 		/*!
-         * \brief Gets the current ebook encoding (set or autodetected) as qtcodec name. Must be implemented,
-         * even if the book doesn't support change of encoding (then it should return a default encoding)
+		 * \brief Gets the current ebook encoding (set or autodetected) as qtcodec name. Must be implemented,
+		 * even if the book doesn't support change of encoding (then it should return a default encoding)
 		 * \return The current encoding.
 		 *
 		 * \ingroup encoding
@@ -209,7 +209,7 @@ class EBook
 		 *
 		 * \ingroup encoding
 		 */
-		virtual bool setCurrentEncoding ( const char * encoding ) = 0;
+		virtual bool setCurrentEncoding ( const char* encoding ) = 0;
 
 		/*!
 		 * \brief Checks if this kind of URL is supported by the ebook format (i.e. could be passed to ebook functions)
@@ -217,11 +217,11 @@ class EBook
 		 */
 		virtual bool isSupportedUrl( const QUrl& url ) = 0;
 
-        // Converts the string to the ebook-specific URL format
-        virtual QUrl pathToUrl( const QString & link ) const = 0;
+		// Converts the string to the ebook-specific URL format
+		virtual QUrl pathToUrl( const QString& link ) const = 0;
 
-        // Extracts the path component from the URL
-        virtual QString urlToPath( const QUrl& link ) const = 0;
+		// Extracts the path component from the URL
+		virtual QString urlToPath( const QUrl& link ) const = 0;
 
 
 	protected:

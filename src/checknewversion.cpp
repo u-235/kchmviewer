@@ -45,7 +45,7 @@ CheckNewVersion::CheckNewVersion()
 	m_inputOffset = 0;
 	m_inputBuffer.resize( 8192 );
 
-	qRegisterMetaType< NewVersionMetaMap >("NewVersionMetaMap");
+	qRegisterMetaType< NewVersionMetaMap >( "NewVersionMetaMap" );
 }
 
 void CheckNewVersion::setUrl( const QString& url )
@@ -76,6 +76,7 @@ void CheckNewVersion::fatalError( int code )
 {
 #if defined (ENABLE_DEBUG_MESSAGES)
 #define CASE_PRINT(A) case A: qDebug("CheckNewVersion::fatalError( " #A " )"); break;
+
 	switch ( code )
 	{
 		CASE_PRINT( Error_URL_Invalid );
@@ -88,6 +89,7 @@ void CheckNewVersion::fatalError( int code )
 		CASE_PRINT( Error_InvalidFormat );
 		CASE_PRINT( Error_InvalidSignature );
 	}
+
 #undef CASE_PRINT
 #endif
 
@@ -100,6 +102,7 @@ void CheckNewVersion::reportStatus( int status )
 {
 #if defined (ENABLE_DEBUG_MESSAGES)
 #define CASE_PRINT(A) case A: qDebug("CheckNewVersion::reportStatus( " #A " )"); break;
+
 	switch ( status )
 	{
 		CASE_PRINT( Status_Resolving );
@@ -109,6 +112,7 @@ void CheckNewVersion::reportStatus( int status )
 		CASE_PRINT( Status_Proceeding );
 		CASE_PRINT( Status_Finished );
 	}
+
 #undef CASE_PRINT
 #endif
 
@@ -130,37 +134,39 @@ void CheckNewVersion::run()
 
 	// Win32s-specific socket initialization
 #if defined (WIN32)
-	WORD wVersionRequested = MAKEWORD (1, 1);
+	WORD wVersionRequested = MAKEWORD ( 1, 1 );
 	WSADATA wsaData;
 
-	if ( WSAStartup (wVersionRequested, &wsaData) != 0 )
+	if ( WSAStartup ( wVersionRequested, &wsaData ) != 0 )
 	{
 		fatalError( Error_System );
 		return;
 	}
+
 #endif
 
 	// IPv4 address resolving
 	struct sockaddr_in saddr;
-	memset( &saddr, 0, sizeof(saddr) );
+	memset( &saddr, 0, sizeof( saddr ) );
 	saddr.sin_family = AF_INET;
-	saddr.sin_port = htons( url.port(80) );
-	saddr.sin_addr.s_addr = ::inet_addr ( qPrintable(url.host() ) );
+	saddr.sin_port = htons( url.port( 80 ) );
+	saddr.sin_addr.s_addr = ::inet_addr ( qPrintable( url.host() ) );
 
 	if ( saddr.sin_addr.s_addr == INADDR_NONE )
 	{
 		reportStatus( Status_Resolving );
 
-		struct hostent *hp;
+		struct hostent* hp;
 #if defined HAVE_GETHOSTBYNAME_R
 		int tmp_errno;
 		struct hostent tmp_hostent;
 		char buf[2048];
 
-		if ( ::gethostbyname_r( qPrintable(url.host() ), &tmp_hostent, buf, sizeof(buf), &hp, &tmp_errno) )
+		if ( ::gethostbyname_r( qPrintable( url.host() ), &tmp_hostent, buf, sizeof( buf ), &hp, &tmp_errno ) )
 			hp = 0;
+
 #else
-		hp = ::gethostbyname( qPrintable(url.host() ) );
+		hp = ::gethostbyname( qPrintable( url.host() ) );
 #endif // HAVE_GETHOSTBYNAME_R
 
 		if ( !hp )
@@ -169,7 +175,7 @@ void CheckNewVersion::run()
 			return;
 		}
 
-		::memcpy (&saddr.sin_addr, hp->h_addr, (size_t) hp->h_length);
+		::memcpy ( &saddr.sin_addr, hp->h_addr, ( size_t ) hp->h_length );
 	}
 
 	// create the socket
@@ -184,22 +190,22 @@ void CheckNewVersion::run()
 	reportStatus( Status_Connecting );
 
 	// Connect to the HTTP server
-	if ( ::connect( m_sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) )
+	if ( ::connect( m_sockfd, ( struct sockaddr* ) &saddr, sizeof( saddr ) ) )
 	{
 		fatalError( Error_Connecting );
 		return;
 	}
 
 	// Prepare the HTTP request
-	QString request = QString("GET %1 HTTP/1.1\r\n"
-			"Host: %2\r\n"
-			"User-Agent: Qt/New version checker (www.karlyriceditor.com)\r\nConnection: close\r\n\r\n")
-				.arg( url.path() ) .arg( url.host() );
+	QString request = QString( "GET %1 HTTP/1.1\r\n"
+							   "Host: %2\r\n"
+							   "User-Agent: Qt/New version checker (www.karlyriceditor.com)\r\nConnection: close\r\n\r\n" )
+					  .arg( url.path() ) .arg( url.host() );
 
 	// Send the request
 	reportStatus( Status_SendingRequest );
 
-	const char * reqmsg = qPrintable( request );
+	const char* reqmsg = qPrintable( request );
 	unsigned int offset = 0, length = strlen( reqmsg );
 
 	while ( offset < length )
@@ -241,11 +247,13 @@ void CheckNewVersion::run()
 	}
 
 	// Make sure server didn't return error
-	if ( header.isEmpty() || header[0].indexOf( QRegExp( "^http/1.\\d\\s+2\\d\\d", Qt::CaseInsensitive )) == -1 )
+	if ( header.isEmpty() || header[0].indexOf( QRegExp( "^http/1.\\d\\s+2\\d\\d", Qt::CaseInsensitive ) ) == -1 )
 	{
 #if defined (ENABLE_DEBUG_MESSAGES)
+
 		if ( !header.isEmpty() )
-			qDebug("CheckNewVersion::run: server returned  invalid header: %s", qPrintable( header[0]) );
+			qDebug( "CheckNewVersion::run: server returned  invalid header: %s", qPrintable( header[0] ) );
+
 #endif
 		fatalError( Error_HTTPerror );
 		return;
@@ -278,14 +286,14 @@ void CheckNewVersion::run()
 	}
 
 	closeSocket();
-	m_inputBuffer[ m_inputOffset ] ='\0';
+	m_inputBuffer[ m_inputOffset ] = '\0';
 
 	// Remove/replace line ends, and convert to a string
 	reportStatus( Status_Proceeding );
 
 	m_inputBuffer.replace( '\r', '\n' );
 	QStringList content_list = QString::fromUtf8( m_inputBuffer ).split( '\n', QString::SkipEmptyParts );
-	QMap<QString,QString> contentMap;
+	QMap<QString, QString> contentMap;
 
 	// Validate the file, and parse it into map
 	for ( int i = 0; i < content_list.size(); i++ )
@@ -295,7 +303,7 @@ void CheckNewVersion::run()
 		if ( content_list[i].indexOf( reg ) == -1 )
 		{
 #if defined (ENABLE_DEBUG_MESSAGES)
-			qDebug("CheckNewVersion::run: invalid line found: '%s'", qPrintable( content_list[i] ) );
+			qDebug( "CheckNewVersion::run: invalid line found: '%s'", qPrintable( content_list[i] ) );
 #endif
 			fatalError( Error_InvalidFormat );
 			return;
@@ -305,13 +313,13 @@ void CheckNewVersion::run()
 		QString value = reg.cap( 2 ).trimmed();
 		value.replace( "\\n", "\n" );
 		value.replace( "\\\\", "\\" );
-		contentMap[ reg.cap(1) ] = value;
+		contentMap[ reg.cap( 1 ) ] = value;
 	}
 
 	// Validate signature
 	if ( !contentMap.contains( "Signature" )
-		|| !contentMap.contains( "Version" )
-		|| contentMap["Signature"] != "CheckNewVersion1" )
+			|| !contentMap.contains( "Version" )
+			|| contentMap["Signature"] != "CheckNewVersion1" )
 	{
 		fatalError( Error_InvalidSignature );
 		return;
@@ -337,7 +345,7 @@ QString CheckNewVersion::readLine()
 		{
 			for ( int i = 0; i < m_inputOffset - 1; i++ )
 			{
-				if ( m_inputBuffer[i] == '\r' && m_inputBuffer[i+1] == '\n' )
+				if ( m_inputBuffer[i] == '\r' && m_inputBuffer[i + 1] == '\n' )
 				{
 					// Null-terminate the buffer, and copy the string
 					m_inputBuffer[i] = '\0';

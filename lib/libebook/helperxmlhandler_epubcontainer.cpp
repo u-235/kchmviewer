@@ -18,7 +18,8 @@
 
 #include "helperxmlhandler_epubcontainer.h"
 
-bool HelperXmlHandler_EpubContainer::startElement(const QString &, const QString &, const QString &qName, const QXmlAttributes &atts)
+bool HelperXmlHandler_EpubContainer::startElement( const QString&, const QString&, const QString& qName,
+		const QXmlAttributes& atts )
 {
 	if ( qName == "rootfile" )
 	{

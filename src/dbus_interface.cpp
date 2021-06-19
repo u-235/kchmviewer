@@ -24,12 +24,12 @@
 #include "tab_search.h"
 
 
-DBusInterface::DBusInterface( QObject *parent )
+DBusInterface::DBusInterface( QObject* parent )
 	: QObject( parent )
 {
 	QDBusConnection::sessionBus().registerObject( "/application",
-												  this,
-												  QDBusConnection::ExportScriptableSlots );
+			this,
+			QDBusConnection::ExportScriptableSlots );
 }
 
 
@@ -38,44 +38,44 @@ DBusInterface::~DBusInterface()
 }
 
 
-void DBusInterface::loadHelpFile( const QString & filename, const QString & page2open )
+void DBusInterface::loadHelpFile( const QString& filename, const QString& page2open )
 {
 	QStringList args;
-	
+
 	args.push_back( filename );
 	args.push_back( page2open );
-	
+
 	qApp->postEvent( ::mainWindow, new UserEvent( "loadAndOpen", args ) );
 }
 
 
-void DBusInterface::openPage( const QString & page2open )
+void DBusInterface::openPage( const QString& page2open )
 {
 	QStringList args;
-	
+
 	args.push_back( page2open );
 	qApp->postEvent( ::mainWindow, new UserEvent( "openPage", args ) );
 }
 
 
-void DBusInterface::guiFindInIndex( const QString & word )
+void DBusInterface::guiFindInIndex( const QString& word )
 {
 	QStringList args;
-	
+
 	args.push_back( word );
 	qApp->postEvent( ::mainWindow, new UserEvent( "findInIndex", args ) );
 }
 
 
-void DBusInterface::guiSearchQuery( const QString & query )
+void DBusInterface::guiSearchQuery( const QString& query )
 {
 	QStringList args;
-	
+
 	args.push_back( query );
 	qApp->postEvent( ::mainWindow, new UserEvent( "searchQuery", args ) );
 }
 
-QStringList DBusInterface::searchQuery( const QString & query )
+QStringList DBusInterface::searchQuery( const QString& query )
 {
 	return ::mainWindow->navigator()->searchQuery( query );
 }

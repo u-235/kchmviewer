@@ -26,14 +26,14 @@ class QUrl;
 // But kchmviewer hasn't given up building with Qt 4 yet.
 class MimeHelper
 {
-public:
-    /**
-     * @brief Assumes MIME type by url or content.
-     * @param url File address.
-     * @param buf File contents.
-     * @return "text/css", "text/html", "text/js" or "application/octet-stream".
-     */
-    static QByteArray mimeType( const QUrl &url, const QByteArray &buf );
+	public:
+		/**
+		 * @brief Assumes MIME type by url or content.
+		 * @param url File address.
+		 * @param buf File contents.
+		 * @return "text/css", "text/html", "text/js" or "application/octet-stream".
+		 */
+		static QByteArray mimeType( const QUrl& url, const QByteArray& buf );
 };
 
 #endif // MIMEHELPER_H

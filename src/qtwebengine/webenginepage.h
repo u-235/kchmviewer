@@ -35,93 +35,97 @@
 
 class WebEnginePage : public QWebEnginePage
 {
-       Q_OBJECT
+		Q_OBJECT
 
-signals:
-    // This signal is emitted whenever the user clicks on a link.
-    void linkClicked( const QUrl &url );
+	signals:
+		// This signal is emitted whenever the user clicks on a link.
+		void linkClicked( const QUrl& url );
 
-public:
-    WebEnginePage(QObject *parent)
-        : QWebEnginePage( parent )
-    {
-        QWebEngineProfile *pf = profile();
-        if ( pf->urlSchemeHandler( EBook_CHM::URL_SCHEME_CHM ) == NULL ) {
-            pf->installUrlSchemeHandler( EBook_CHM::URL_SCHEME_CHM, new DataProvider( pf ) );
-        }
+	public:
+		WebEnginePage( QObject* parent )
+			: QWebEnginePage( parent )
+		{
+			QWebEngineProfile* pf = profile();
 
-        if ( pf->urlSchemeHandler( EBook_EPUB::URL_SCHEME_EPUB ) == NULL ) {
-            pf->installUrlSchemeHandler( EBook_EPUB::URL_SCHEME_EPUB, new DataProvider( pf ) );
-        }
+			if ( pf->urlSchemeHandler( EBook_CHM::URL_SCHEME_CHM ) == NULL )
+			{
+				pf->installUrlSchemeHandler( EBook_CHM::URL_SCHEME_CHM, new DataProvider( pf ) );
+			}
 
-        connect( this, SIGNAL( linkHovered( const QString & ) ), this, SLOT( onLinkHovered( const QString & ) ) );
-    }
+			if ( pf->urlSchemeHandler( EBook_EPUB::URL_SCHEME_EPUB ) == NULL )
+			{
+				pf->installUrlSchemeHandler( EBook_EPUB::URL_SCHEME_EPUB, new DataProvider( pf ) );
+			}
 
-    ~WebEnginePage()
-    {
-    }
+			connect( this, SIGNAL( linkHovered( const QString& ) ), this, SLOT( onLinkHovered( const QString& ) ) );
+		}
 
-    // Link click capture. This does not work for the right mouse button.
-    virtual bool acceptNavigationRequest( const QUrl &url, NavigationType type, bool isMainFrame ) override
-    {
+		~WebEnginePage()
+		{
+		}
+
+		// Link click capture. This does not work for the right mouse button.
+		virtual bool acceptNavigationRequest( const QUrl& url, NavigationType type, bool isMainFrame ) override
+		{
 #if PRINT_DEBUG
-        qDebug() << "[DEBUG] WebEnginePage::acceptNavigationRequest";
-        qDebug() << "  url = " << url.toString();
-        qDebug() << "  type  = " << type;
-        qDebug() << "  isMainFrame  = " << isMainFrame;
+			qDebug() << "[DEBUG] WebEnginePage::acceptNavigationRequest";
+			qDebug() << "  url = " << url.toString();
+			qDebug() << "  type  = " << type;
+			qDebug() << "  isMainFrame  = " << isMainFrame;
 #else
-        Q_UNUSED( isMainFrame );
+			Q_UNUSED( isMainFrame );
 #endif
 
-        if ( type == QWebEnginePage::NavigationTypeLinkClicked )
-        {
-            emit linkClicked( url );
-            return false;
-        }
+			if ( type == QWebEnginePage::NavigationTypeLinkClicked )
+			{
+				emit linkClicked( url );
+				return false;
+			}
 
-        return true;
-    }
+			return true;
+		}
 
-    /*
-     * If the link has the "target = _new" attribute, then the WebEngine tries to create
-     * a new page using the createWindow function. However, the old page does not receive
-     * an acceptNavigationRequest unless the Ctrl or Shift key has been pressed.
-     *
-     * The createWindow function is also used from JavaScript to create a new page, but this
-     * does not work in this implementation.
-     */
-    QWebEnginePage *createWindow( QWebEnginePage::WebWindowType type )
-    {
+		/*
+		 * If the link has the "target = _new" attribute, then the WebEngine tries to create
+		 * a new page using the createWindow function. However, the old page does not receive
+		 * an acceptNavigationRequest unless the Ctrl or Shift key has been pressed.
+		 *
+		 * The createWindow function is also used from JavaScript to create a new page, but this
+		 * does not work in this implementation.
+		 */
+		QWebEnginePage* createWindow( QWebEnginePage::WebWindowType type )
+		{
 #if PRINT_DEBUG
-        qDebug() << "[DEBUG] WebEnginePage::createWindow";
-        qDebug() << "  type = " << type;
+			qDebug() << "[DEBUG] WebEnginePage::createWindow";
+			qDebug() << "  type = " << type;
 #else
-        Q_UNUSED( type );
+			Q_UNUSED( type );
 #endif
 
-        if ( !m_url.isEmpty() )
-        {
-            Qt::KeyboardModifiers mods = QApplication::keyboardModifiers();
-            if ( !( mods & (Qt::ShiftModifier | Qt::ControlModifier ) ) )
-                linkClicked( ( m_url ) );
-        }
+			if ( !m_url.isEmpty() )
+			{
+				Qt::KeyboardModifiers mods = QApplication::keyboardModifiers();
 
-        return 0;
-    }
+				if ( !( mods & ( Qt::ShiftModifier | Qt::ControlModifier ) ) )
+					linkClicked( ( m_url ) );
+			}
 
-protected slots:
-    void 	onLinkHovered( const QString &url )
-    {
+			return 0;
+		}
+
+	protected slots:
+		void 	onLinkHovered( const QString& url )
+		{
 #if PRINT_DEBUG
-        qDebug() << "[DEBUG] WebEnginePage::linkHovered";
-        qDebug() << "  url = " << url;
+			qDebug() << "[DEBUG] WebEnginePage::linkHovered";
+			qDebug() << "  url = " << url;
 #endif
 
-        m_url = url;
-    }
+			m_url = url;
+		}
 
-protected:
-    QString m_url;
+	protected:
+		QString m_url;
 };
 
 #undef PRINT_DEBUG

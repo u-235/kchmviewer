@@ -20,7 +20,7 @@
 #define KDE_QT_H
 
 #if defined (USE_KDE)
-	
+
 	#define KQ_CLASSNAME(name)			K##name
 	#define KQ_DECLARECLASS(name)		class KQ##name : public K##name
 
@@ -53,8 +53,8 @@
 	#include <QTabWidget>
 	#include <QMessageBox>
 	#include <QProgressDialog>
-    #include <QPrinter>
-    #include <QPrintDialog>
+	#include <QPrinter>
+	#include <QPrintDialog>
 
 	#define i18n(A)		tr(A)
 
@@ -93,25 +93,32 @@
 #include <QEvent>
 
 
-class KQProgressModalDialog : public KQ_CLASSNAME(ProgressDialog)
+class KQProgressModalDialog : public KQ_CLASSNAME( ProgressDialog )
 {
 	public:
-		KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator = 0 );
-		
+		KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText,
+								int totalSteps, QWidget* creator = 0 );
+
 		// Seems like people have fun making classes incompatible
-#if defined (USE_KDE)		
-		void   setValue( int value ) { progressBar()->setValue( value ); }
+#if defined (USE_KDE)
+		void   setValue( int value )
+		{
+			progressBar()->setValue( value );
+		}
 #else
-		bool   wasCancelled() { return wasCanceled(); }
+		bool   wasCancelled()
+		{
+			return wasCanceled();
+		}
 #endif
 
 };
 
-class KQTabWidget : public KQ_CLASSNAME(TabWidget)
+class KQTabWidget : public KQ_CLASSNAME( TabWidget )
 {
-public:
-	KQTabWidget (QWidget *parent = 0 )
-		: KQ_CLASSNAME(TabWidget) (parent) {}
+	public:
+		KQTabWidget ( QWidget* parent = 0 )
+			: KQ_CLASSNAME( TabWidget ) ( parent ) {}
 };
 
 
@@ -132,8 +139,14 @@ public:
 class ShowWaitCursor
 {
 	public:
-		ShowWaitCursor() { QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) ); }
-		~ShowWaitCursor() { QApplication::restoreOverrideCursor(); }
+		ShowWaitCursor()
+		{
+			QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+		}
+		~ShowWaitCursor()
+		{
+			QApplication::restoreOverrideCursor();
+		}
 };
 
 
@@ -148,5 +161,5 @@ class Settings;
 class ViewWindowMgr;
 class EBookUrl;
 
-				 
+
 #endif /* KDE_QT_H */

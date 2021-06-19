@@ -35,11 +35,11 @@
 //
 class RecentFiles : public QObject
 {
-	Q_OBJECT
+		Q_OBJECT
 
 	public:
 		// A constructor specifies the menu to add recent files to, and the action to add it before.
-		RecentFiles( QMenu * menu, QAction * before, int maxfiles = 5, const QString& settingsname = QString::null );
+		RecentFiles( QMenu* menu, QAction* before, int maxfiles = 5, const QString& settingsname = QString::null );
 		virtual ~RecentFiles();
 
 	signals:
@@ -70,7 +70,7 @@ class RecentFiles : public QObject
 
 	private:
 		QString				m_settingsName;
-		QAction			*	m_separator;
+		QAction*				m_separator;
 		QVector< QAction* >	m_actions;
 };
 

@@ -20,7 +20,7 @@
 #include <QFileInfo>
 #include <QDataStream>
 #include <QDateTime>
- 
+
 #include "settings.h"
 #include "config.h"
 
@@ -35,21 +35,21 @@ enum marker_t
 {
 	MARKER_FILESIZE = 1,
 	MARKER_FILETIME,
-	
+
 	MARKER_ACTIVETABSYSTEM,
 	MARKER_ACTIVETABWINDOW,
 	MARKER_ACTIVEENCODING,
 	MARKER_SEARCHHISTORY,
 	MARKER_WINDOW_SIZE,
-	
+
 	MARKER_BOOKMARKS,
 	MARKER_VIEWINDOWS,
- 
- 	MARKER_CONTENTSDATA,
+
+	MARKER_CONTENTSDATA,
 	MARKER_INDEXDATA,
 
 	MARKER_ACTIVEENCODINGNAME,
-		
+
 	// This should be the last
 	MARKER_END = 0x7FFF
 };
@@ -57,7 +57,7 @@ enum marker_t
 // Helpers for serialization of SavedBookmark through QDataStream
 static inline QDataStream& operator<< ( QDataStream& s, const Settings::SavedBookmark& b )
 {
-	s << b.name;	
+	s << b.name;
 	s << b.url;
 	s << b.scroll_y;
 	return s;
@@ -85,7 +85,7 @@ static inline QDataStream& operator<< ( QDataStream& s, const Settings::SavedVie
 static inline QDataStream& operator>> ( QDataStream& s, Settings::SavedViewWindow& b )
 {
 	qint32 version;
-	
+
 	s >> version;
 	s >> b.url;
 	s >> b.scroll_y;
@@ -110,19 +110,19 @@ Settings::Settings()
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
 	m_activeEncoding = "CP1252";
-	
+
 	m_window_size_x = 700;
 	m_window_size_y = 500;
 	m_window_size_splitter = 200;
 }
 
 
-bool Settings::loadSettings( const QString & filename )
+bool Settings::loadSettings( const QString& filename )
 {
 	m_activetabsystem = 0;
 	m_activetabwindow = 0;
 	m_activeEncoding = "CP1252";
-	
+
 	m_searchhistory.clear();
 	m_bookmarks.clear();
 	m_viewwindows.clear();
@@ -131,38 +131,39 @@ bool Settings::loadSettings( const QString & filename )
 
 	m_settingsFile = QString::null;
 	m_searchIndex = QString::null;
-	
+
 	if ( !finfo.size() )
 		return false;
-	
+
 	// Init those params, as they'll be used during save the first time even if the file is not here
 	m_currentfilesize = finfo.size();
 	m_currentfiledate = finfo.lastModified().toTime_t();
 	m_settingsFile = pConfig->getEbookSettingFile( filename );
 	m_searchIndex = pConfig->getEbookIndexFile( filename );
-	
+
 	QFile file( m_settingsFile );
 
-    if ( !file.open (QIODevice::ReadOnly) )
+	if ( !file.open ( QIODevice::ReadOnly ) )
 		return false; // it's ok, file may not exist
-	
-    QDataStream stream (&file);
+
+	QDataStream stream ( &file );
 
 	// Read and check header
 	qint32 data;
 	bool complete_read = false;
 	stream >> data; // magic
-	
+
 	if ( data != SETTINGS_MAGIC )
 	{
-		qWarning ("file %s has bad magic value, ignoring it.", qPrintable( file.fileName()) );
+		qWarning ( "file %s has bad magic value, ignoring it.", qPrintable( file.fileName() ) );
 		return false;
 	}
-	
+
 	stream >> data; // version
+
 	if ( data > SETTINGS_VERSION )
 	{
-		qWarning ("file %s has unsupported data version %d, ignoring it.", qPrintable( file.fileName()), data);
+		qWarning ( "file %s has unsupported data version %d, ignoring it.", qPrintable( file.fileName() ), data );
 		return false;
 	}
 
@@ -170,59 +171,64 @@ bool Settings::loadSettings( const QString & filename )
 	while ( 1 )
 	{
 		stream >> data; // marker
+
 		if ( data == MARKER_END )
 		{
 			complete_read = true;
 			break;
 		}
-		
-		switch (data)
+
+		switch ( data )
 		{
 		case MARKER_FILESIZE:
 			stream >> m_currentfilesize;
+
 			if ( m_currentfilesize != finfo.size() )
 			{
 				m_currentfilesize = finfo.size();
 				return false;
 			}
+
 			break;
-			
+
 		case MARKER_FILETIME:
 			stream >> m_currentfiledate;
+
 			if ( m_currentfiledate != finfo.lastModified().toTime_t() )
 			{
 				m_currentfiledate = finfo.lastModified().toTime_t();
 				return false;
 			}
+
 			break;
-			
+
 		case MARKER_ACTIVETABSYSTEM:
 			stream >> m_activetabsystem;
 			break;
-	
+
 		case MARKER_ACTIVETABWINDOW:
 			stream >> m_activetabwindow;
 			break;
-			
+
 		// Not used anymore
 		case MARKER_ACTIVEENCODING:
 			stream >> data;
 			break;
-			
+
 		case MARKER_ACTIVEENCODINGNAME:
 			stream >> m_activeEncoding;
 			break;
-	
+
 		case MARKER_WINDOW_SIZE:
 			stream >> m_window_size_x;
 			stream >> m_window_size_y;
 			stream >> m_window_size_splitter;
 			break;
-			
+
 		case MARKER_SEARCHHISTORY:
 			stream >> m_searchhistory;
 			break;
-	
+
 		case MARKER_BOOKMARKS:
 			stream >> m_bookmarks;
 			break;
@@ -232,7 +238,7 @@ bool Settings::loadSettings( const QString & filename )
 			break;
 		}
 	}
-	
+
 	return complete_read;
 }
 
@@ -240,15 +246,16 @@ bool Settings::loadSettings( const QString & filename )
 bool Settings::saveSettings( )
 {
 	QFile file( m_settingsFile );
-    if ( !file.open (QIODevice::WriteOnly) )
+
+	if ( !file.open ( QIODevice::WriteOnly ) )
 	{
-		qWarning ("Could not write settings into file %s: %s", 
-		          qPrintable( file.fileName()), 
-		          qPrintable( file.errorString() ));
+		qWarning ( "Could not write settings into file %s: %s",
+				   qPrintable( file.fileName() ),
+				   qPrintable( file.errorString() ) );
 		return false;
 	}
-	
-    QDataStream stream (&file);
+
+	QDataStream stream ( &file );
 
 	// Save header
 	stream << SETTINGS_MAGIC;
@@ -259,40 +266,40 @@ bool Settings::saveSettings( )
 	stream << m_currentfilesize;
 	stream << MARKER_FILETIME;
 	stream << m_currentfiledate;
-	
+
 	// Save generic settings
 	stream << MARKER_ACTIVETABSYSTEM;
 	stream << m_activetabsystem;
-	
+
 	// Save generic settings
 	stream << MARKER_ACTIVETABWINDOW;
 	stream << m_activetabwindow;
-	
+
 	stream << MARKER_ACTIVEENCODINGNAME;
 	stream << m_activeEncoding;
-	
+
 	// Save search history vector
 	stream << MARKER_SEARCHHISTORY;
 	stream << m_searchhistory;
-	
+
 	// Save window size and splitter position
 	stream << MARKER_WINDOW_SIZE;
 	stream << m_window_size_x;
 	stream << m_window_size_y;
 	stream << m_window_size_splitter;
-	
+
 	stream << MARKER_BOOKMARKS;
 	stream << m_bookmarks;
 
 	stream << MARKER_VIEWINDOWS;
 	stream << m_viewwindows;
-	
+
 	stream << MARKER_END;
 	return true;
 }
 
 
-void Settings::removeSettings( const QString & filename )
+void Settings::removeSettings( const QString& filename )
 {
 	QString settingsfile = pConfig->getEbookSettingFile( filename );
 	QString idxfile = pConfig->getEbookIndexFile( filename );

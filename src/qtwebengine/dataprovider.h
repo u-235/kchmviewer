@@ -24,10 +24,10 @@
 
 class DataProvider : public QWebEngineUrlSchemeHandler
 {
-    public:
-        DataProvider( QObject *parent );
+	public:
+		DataProvider( QObject* parent );
 
-        void requestStarted( QWebEngineUrlRequestJob *request );
+		void requestStarted( QWebEngineUrlRequestJob* request );
 };
 
 #endif // QTWEBENGINE_DATAPROVIDER_H

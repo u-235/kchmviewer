@@ -22,7 +22,7 @@
 
 #include "recentfiles.h"
 
-RecentFiles::RecentFiles( QMenu * menu, QAction * before, int maxfiles, const QString& settingsname )
+RecentFiles::RecentFiles( QMenu* menu, QAction* before, int maxfiles, const QString& settingsname )
 {
 	if ( maxfiles < 1 )
 		qFatal( "RecentFiles::RecentFiles: maxfiles (%d) is < 1 ", maxfiles );
@@ -34,8 +34,8 @@ RecentFiles::RecentFiles( QMenu * menu, QAction * before, int maxfiles, const QS
 	for ( int i = 0; i < maxfiles; ++i )
 	{
 		m_actions[i] = new QAction( this );
-		m_actions[i]->setVisible(false);
-		connect( m_actions[i], SIGNAL(triggered()), this, SLOT(actionRecent()) );
+		m_actions[i]->setVisible( false );
+		connect( m_actions[i], SIGNAL( triggered() ), this, SLOT( actionRecent() ) );
 	}
 
 	// Add them to the menu
@@ -78,7 +78,7 @@ void RecentFiles::removeRecentFile( const QString& file )
 
 void RecentFiles::actionRecent()
 {
-	QAction *action = qobject_cast<QAction *>(sender());
+	QAction* action = qobject_cast<QAction*>( sender() );
 
 	if ( action )
 		emit openRecentFile( action->data().toString() );
@@ -93,14 +93,14 @@ void RecentFiles::updateMenu()
 	{
 		if ( i < numRecentFiles )
 		{
-			QString text = tr("&%1 %2").arg(i + 1).arg( QFileInfo( files[i] ).fileName() );
-			m_actions[i]->setText(text);
+			QString text = tr( "&%1 %2" ).arg( i + 1 ).arg( QFileInfo( files[i] ).fileName() );
+			m_actions[i]->setText( text );
 			m_actions[i]->setToolTip( files[i] );
-			m_actions[i]->setData(files[i]);
-			m_actions[i]->setVisible(true);
+			m_actions[i]->setData( files[i] );
+			m_actions[i]->setVisible( true );
 		}
 		else
-			m_actions[i]->setVisible(false);
+			m_actions[i]->setVisible( false );
 	}
 
 	m_separator->setVisible( numRecentFiles > 0 );

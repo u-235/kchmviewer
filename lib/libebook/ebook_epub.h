@@ -36,7 +36,7 @@ class EBook_EPUB : public EBook
 		EBook_EPUB();
 		virtual ~EBook_EPUB();
 
-		static const char * URL_SCHEME_EPUB;
+		static const char* URL_SCHEME_EPUB;
 
 		/*!
 		 * \brief Attempts to load epub file.
@@ -71,11 +71,11 @@ class EBook_EPUB : public EBook
 		virtual QUrl homeUrl() const;
 
 		/*!
-         * \brief Checks whether the specific feature is present in this file.
-         * \return true if it is available; false otherwise.
-         * \ingroup information
-         */
-        virtual bool  hasFeature( Feature code ) const;
+		 * \brief Checks whether the specific feature is present in this file.
+		 * \return true if it is available; false otherwise.
+		 * \ingroup information
+		 */
+		virtual bool  hasFeature( Feature code ) const;
 
 		/*!
 		 * \brief Parses and fills up the Table of Contents (TOC)
@@ -161,7 +161,7 @@ class EBook_EPUB : public EBook
 		 *
 		 * \ingroup encoding
 		 */
-		virtual bool setCurrentEncoding ( const char * encoding );
+		virtual bool setCurrentEncoding ( const char* encoding );
 
 		/*!
 		 * \brief Checks if this kind of URL is supported by the ebook format (i.e. could be passed to ebook functions)
@@ -170,14 +170,14 @@ class EBook_EPUB : public EBook
 		virtual bool isSupportedUrl( const QUrl& url );
 
 		// Converts the string to the ebook-specific URL format
-		QUrl pathToUrl( const QString & link ) const;
+		QUrl pathToUrl( const QString& link ) const;
 
 		// Extracts the path component from the URL
 		QString urlToPath( const QUrl& link ) const;
 
 	private:
 		// Parses the XML file using a specified parser
-		bool	parseXML( const QString& uri, QXmlDefaultHandler * reader );
+		bool	parseXML( const QString& uri, QXmlDefaultHandler* reader );
 
 		// Parses the book description file. Fills up the ebook info
 		bool	parseBookinfo();
@@ -188,7 +188,7 @@ class EBook_EPUB : public EBook
 
 		// ZIP archive fd and structs
 		QFile			m_epubFile;
-		struct zip *	m_zipFile;
+		struct zip* 	m_zipFile;
 
 		// Ebook info
 		QString			m_title;

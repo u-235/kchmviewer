@@ -19,7 +19,8 @@
 #include "kde-qt.h"
 
 #if defined (USE_KDE)
-KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
+KQProgressModalDialog::KQProgressModalDialog ( const QString& captionText, const QString& labelText,
+		const QString& cancelButtonText, int totalSteps, QWidget* creator )
 	: KProgressDialog( creator, captionText, labelText )
 {
 	setAllowCancel( true );
@@ -30,7 +31,8 @@ KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, cons
 	setMinimumDuration( 1 );
 }
 #else
-KQProgressModalDialog::KQProgressModalDialog ( const QString & captionText, const QString & labelText, const QString & cancelButtonText, int totalSteps, QWidget * creator )
+KQProgressModalDialog::KQProgressModalDialog ( const QString& captionText, const QString& labelText,
+		const QString& cancelButtonText, int totalSteps, QWidget* creator )
 	: QProgressDialog( labelText, cancelButtonText, 0, totalSteps, creator )
 {
 	setWindowTitle( captionText );

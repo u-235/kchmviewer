@@ -25,7 +25,7 @@
 #include "settings.h"
 #include "mainwindow.h"
 
-Config * pConfig;
+Config* pConfig;
 
 Config::Config()
 {
@@ -35,24 +35,24 @@ Config::Config()
 	if ( QFile( m_datapath ).exists() )
 	{
 		QSettings::setPath( QSettings::defaultFormat(), QSettings::UserScope, m_datapath );
-		m_datapath += QDir::separator() + QString("data");
+		m_datapath += QDir::separator() + QString( "data" );
 	}
 	else
 		m_datapath = QDir::homePath () + "/" + ".kchmviewer";
 
 	QSettings settings;
 
-    m_startupMode = (Config::StartupMode) settings.value( "settings/onstartup", STARTUP_DO_NOTHING ).toInt();
-    m_onNewChmClick = (Config::choose_action_t) settings.value( "settings/onnewchm", ACTION_ASK_USER ).toInt();
-    m_onExternalLinkClick = (Config::choose_action_t) settings.value( "settings/onexternal", ACTION_ASK_USER ).toInt();
-    m_numOfRecentFiles = settings.value( "settings/maxrecentfiles", 10 ).toInt();
-    m_HistoryStoreExtra = settings.value( "settings/extrahistory", true ).toBool();
+	m_startupMode = ( Config::StartupMode ) settings.value( "settings/onstartup", STARTUP_DO_NOTHING ).toInt();
+	m_onNewChmClick = ( Config::choose_action_t ) settings.value( "settings/onnewchm", ACTION_ASK_USER ).toInt();
+	m_onExternalLinkClick = ( Config::choose_action_t ) settings.value( "settings/onexternal", ACTION_ASK_USER ).toInt();
+	m_numOfRecentFiles = settings.value( "settings/maxrecentfiles", 10 ).toInt();
+	m_HistoryStoreExtra = settings.value( "settings/extrahistory", true ).toBool();
 	m_advUseInternalEditor = settings.value( "advanced/internaleditor", true ).toBool();
 	m_advLayoutDirectionRL = settings.value( "advanced/layoutltr", false ).toBool();
 	m_advAutodetectEncoding = settings.value( "advanced/autodetectenc", false ).toBool();
 	m_advExternalEditorPath = settings.value( "advanced/editorpath", "/usr/bin/kate" ).toString();
 	m_advCheckNewVersion = settings.value( "advanced/checknewver", true ).toBool();
-	m_toolbarMode = (Config::ToolbarMode) settings.value( "advanced/toolbarmode", TOOLBAR_LARGEICONSTEXT ).toInt();
+	m_toolbarMode = ( Config::ToolbarMode ) settings.value( "advanced/toolbarmode", TOOLBAR_LARGEICONSTEXT ).toInt();
 	m_lastOpenedDir = settings.value( "advanced/lastopendir", "." ).toString();
 
 	m_browserEnableJS = settings.value( "browser/enablejs", true ).toBool();
@@ -62,16 +62,16 @@ Config::Config()
 	m_browserEnableOfflineStorage = settings.value( "browser/enableofflinestorage", false ).toBool();
 	m_browserEnableLocalStorage = settings.value( "browser/enablelocalstorage", false ).toBool();
 	m_browserEnableRemoteContent = settings.value( "browser/enableremotecontent", false ).toBool();
-    m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
+	m_browserHighlightSearchResults = settings.value( "browser/highlightsearchresults", true ).toBool();
 
-    m_tocOpenAllEntries = settings.value( "browser/tocopenallentries", true ).toBool();
-    m_tabUseSingleClick = settings.value( "browser/tabusesingleclick", true ).toBool();
+	m_tocOpenAllEntries = settings.value( "browser/tocopenallentries", true ).toBool();
+	m_tabUseSingleClick = settings.value( "browser/tabusesingleclick", true ).toBool();
 
 	QDir dir;
-	dir.setPath (m_datapath);
+	dir.setPath ( m_datapath );
 
-	if ( !dir.exists() && !dir.mkdir(m_datapath) )
-		qWarning( "Could not create directory %s", qPrintable( m_datapath ));
+	if ( !dir.exists() && !dir.mkdir( m_datapath ) )
+		qWarning( "Could not create directory %s", qPrintable( m_datapath ) );
 }
 
 
@@ -79,11 +79,11 @@ void Config::save( )
 {
 	QSettings settings;
 
-    settings.setValue( "settings/onstartup", m_startupMode );
-    settings.setValue( "settings/onnewchm", m_onNewChmClick );
-    settings.setValue( "settings/onexternal", m_onExternalLinkClick );
-    settings.setValue( "settings/maxrecentfiles", m_numOfRecentFiles );
-    settings.setValue( "settings/extrahistory", m_HistoryStoreExtra );
+	settings.setValue( "settings/onstartup", m_startupMode );
+	settings.setValue( "settings/onnewchm", m_onNewChmClick );
+	settings.setValue( "settings/onexternal", m_onExternalLinkClick );
+	settings.setValue( "settings/maxrecentfiles", m_numOfRecentFiles );
+	settings.setValue( "settings/extrahistory", m_HistoryStoreExtra );
 	settings.setValue( "advanced/internaleditor", m_advUseInternalEditor );
 	settings.setValue( "advanced/layoutltr", m_advLayoutDirectionRL );
 	settings.setValue( "advanced/autodetectenc", m_advAutodetectEncoding );
@@ -99,13 +99,13 @@ void Config::save( )
 	settings.setValue( "browser/enableofflinestorage", m_browserEnableOfflineStorage );
 	settings.setValue( "browser/enablelocalstorage", m_browserEnableLocalStorage );
 	settings.setValue( "browser/enableremotecontent", m_browserEnableRemoteContent );
-    settings.setValue( "browser/highlightsearchresults", m_browserHighlightSearchResults );
+	settings.setValue( "browser/highlightsearchresults", m_browserHighlightSearchResults );
 
-    settings.setValue( "browser/tocopenallentries", m_tocOpenAllEntries );
-    settings.setValue( "browser/tabusesingleclick", m_tabUseSingleClick );
+	settings.setValue( "browser/tocopenallentries", m_tocOpenAllEntries );
+	settings.setValue( "browser/tabusesingleclick", m_tabUseSingleClick );
 }
 
-QString Config::getEbookSettingFile(const QString &ebookfile ) const
+QString Config::getEbookSettingFile( const QString& ebookfile ) const
 {
 	QFileInfo finfo ( ebookfile );
 	QString prefix = pConfig->m_datapath + QDir::separator() + finfo.completeBaseName();
@@ -113,7 +113,7 @@ QString Config::getEbookSettingFile(const QString &ebookfile ) const
 	return prefix + ".kchmviewer";
 }
 
-QString Config::getEbookIndexFile(const QString &ebookfile) const
+QString Config::getEbookIndexFile( const QString& ebookfile ) const
 {
 	QFileInfo finfo ( ebookfile );
 	QString prefix = pConfig->m_datapath + "/" + finfo.completeBaseName();

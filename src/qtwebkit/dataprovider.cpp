@@ -25,7 +25,7 @@
 #include "../mimehelper.h"
 
 
-KCHMNetworkReply::KCHMNetworkReply( const QNetworkRequest &request, const QUrl &url )
+KCHMNetworkReply::KCHMNetworkReply( const QNetworkRequest& request, const QUrl& url )
 {
 	setRequest( request );
 	setOpenMode( QIODevice::ReadOnly );
@@ -33,13 +33,13 @@ KCHMNetworkReply::KCHMNetworkReply( const QNetworkRequest &request, const QUrl &
 	m_data = loadResource( url );
 	m_length = m_data.length();
 
-	setHeader( QNetworkRequest::ContentLengthHeader, QByteArray::number(m_data.length()) );
-	QMetaObject::invokeMethod(this, "metaDataChanged", Qt::QueuedConnection);
+	setHeader( QNetworkRequest::ContentLengthHeader, QByteArray::number( m_data.length() ) );
+	QMetaObject::invokeMethod( this, "metaDataChanged", Qt::QueuedConnection );
 
 	if ( m_length )
-		QMetaObject::invokeMethod(this, "readyRead", Qt::QueuedConnection);
+		QMetaObject::invokeMethod( this, "readyRead", Qt::QueuedConnection );
 
-	QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
+	QMetaObject::invokeMethod( this, "finished", Qt::QueuedConnection );
 }
 
 qint64 KCHMNetworkReply::bytesAvailable() const
@@ -51,22 +51,22 @@ void KCHMNetworkReply::abort()
 {
 }
 
-qint64 KCHMNetworkReply::readData(char *buffer, qint64 maxlen)
+qint64 KCHMNetworkReply::readData( char* buffer, qint64 maxlen )
 {
-	qint64 len = qMin(qint64(m_data.length()), maxlen);
+	qint64 len = qMin( qint64( m_data.length() ), maxlen );
 
-	if (len)
+	if ( len )
 	{
-        memcpy(buffer, m_data.constData(), len);
-		m_data.remove(0, len);
+		memcpy( buffer, m_data.constData(), len );
+		m_data.remove( 0, len );
 	}
 
 	return len;
 }
 
-QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
+QByteArray KCHMNetworkReply::loadResource( const QUrl& url )
 {
-    //qDebug("loadResource %s", qPrintable(url.toString()) );
+	//qDebug("loadResource %s", qPrintable(url.toString()) );
 
 	// Retreive the data from ebook file
 	QByteArray buf;
@@ -77,21 +77,23 @@ QByteArray KCHMNetworkReply::loadResource( const QUrl &url )
 
 	}
 
-    if ( MimeHelper::mimeType( url, buf ) == "text/html" )
-        setHeader( QNetworkRequest::ContentTypeHeader, QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() ) );
+	if ( MimeHelper::mimeType( url, buf ) == "text/html" )
+		setHeader( QNetworkRequest::ContentTypeHeader,
+				   QString( "text/html; charset=%1" ) .arg( ::mainWindow->chmFile()->currentEncoding() ) );
 
 	return buf;
 }
 
 
-KCHMNetworkAccessManager::KCHMNetworkAccessManager( QObject *parent )
-	: QNetworkAccessManager(parent)
+KCHMNetworkAccessManager::KCHMNetworkAccessManager( QObject* parent )
+	: QNetworkAccessManager( parent )
 {
 }
 
-QNetworkReply * KCHMNetworkAccessManager::createRequest( Operation op, const QNetworkRequest &request, QIODevice *outgoingData )
+QNetworkReply* KCHMNetworkAccessManager::createRequest( Operation op, const QNetworkRequest& request,
+		QIODevice* outgoingData )
 {
-    //qDebug("KCHMNetworkAccessManager::createRequest %s", qPrintable( request.url().toString()) );
+	//qDebug("KCHMNetworkAccessManager::createRequest %s", qPrintable( request.url().toString()) );
 
 	if ( ::mainWindow->chmFile()->isSupportedUrl( request.url() ) )
 		return new KCHMNetworkReply( request, request.url() );
@@ -99,5 +101,5 @@ QNetworkReply * KCHMNetworkAccessManager::createRequest( Operation op, const QNe
 	if ( pConfig->m_browserEnableRemoteContent )
 		return QNetworkAccessManager::createRequest( op, request, outgoingData );
 	else
-		return QNetworkAccessManager::createRequest( QNetworkAccessManager::GetOperation, QNetworkRequest(QUrl()) );
+		return QNetworkAccessManager::createRequest( QNetworkAccessManager::GetOperation, QNetworkRequest( QUrl() ) );
 }

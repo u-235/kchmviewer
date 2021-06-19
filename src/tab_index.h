@@ -26,27 +26,27 @@
 
 class TabIndex : public QWidget, public Ui::TabIndex
 {
-	Q_OBJECT
+		Q_OBJECT
 	public:
-		TabIndex( QWidget * parent = 0 );
-	
+		TabIndex( QWidget* parent = 0 );
+
 		void	invalidate();
 		void	search( const QString& index );
 		void	focus();
-		
+
 	private slots:
-		void 	onTextChanged ( const QString & newvalue);
+		void 	onTextChanged ( const QString& newvalue );
 		void 	onReturnPressed ();
-		void	onItemActivated ( QTreeWidgetItem * item, int column );
-		void	onContextMenuRequested ( const QPoint &point );
-		
+		void	onItemActivated ( QTreeWidgetItem* item, int column );
+		void	onContextMenuRequested ( const QPoint& point );
+
 	private:
-		void	showEvent ( QShowEvent * );
-		
+		void	showEvent ( QShowEvent* );
+
 		void	refillIndex();
-		
-		QMenu 			* 	m_contextMenu;	
-		QTreeWidgetItem	*	m_lastSelectedItem;
+
+		QMenu* 			 	m_contextMenu;
+		QTreeWidgetItem*		m_lastSelectedItem;
 		bool				m_indexListFilled;
 };
 

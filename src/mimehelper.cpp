@@ -26,29 +26,30 @@
 // Yes, I know about std::isspace(), but it may depend on the locale.
 #define isspace(c) (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v')
 
-QByteArray MimeHelper::mimeType(const QUrl &url, const QByteArray &buf)
+QByteArray MimeHelper::mimeType( const QUrl& url, const QByteArray& buf )
 {
-    QString path = url.path().toLower();
+	QString path = url.path().toLower();
 
-    // Try to recognize the MIME type by the extension of the file name.
-    if ( path.endsWith( ".css" ) )
-        return "text/css";
-    else if ( path.endsWith( ".js" ) )
-        return "text/js";
-    else if ( path.endsWith( ".htm" ) | path.endsWith( ".html" ) | path.endsWith( ".xhtml" ) )
-        return "text/html";
+	// Try to recognize the MIME type by the extension of the file name.
+	if ( path.endsWith( ".css" ) )
+		return "text/css";
+	else if ( path.endsWith( ".js" ) )
+		return "text/js";
+	else if ( path.endsWith( ".htm" ) | path.endsWith( ".html" ) | path.endsWith( ".xhtml" ) )
+		return "text/html";
 
-    // If the first non space character in buf is '<',
-    // then we assume that the buffer contains HTML.
-    for (auto iter = buf.begin(); iter != buf.end() ; iter++) {
-        char c = *iter;
+	// If the first non space character in buf is '<',
+	// then we assume that the buffer contains HTML.
+	for ( auto iter = buf.begin(); iter != buf.end() ; iter++ )
+	{
+		char c = *iter;
 
-        if (c == '<')
-            return "text/html";
+		if ( c == '<' )
+			return "text/html";
 
-        if (!isspace(c))
-            break;
-    }
+		if ( !isspace( c ) )
+			break;
+	}
 
-    return "application/octet-stream";
+	return "application/octet-stream";
 }

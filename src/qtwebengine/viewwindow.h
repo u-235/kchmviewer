@@ -26,104 +26,110 @@
 
 class ViewWindow : public QWebEngineView
 {
-    Q_OBJECT
+		Q_OBJECT
 
-    public:
-        ViewWindow( QWidget * parent );
-        virtual ~ViewWindow();
+	public:
+		ViewWindow( QWidget* parent );
+		virtual ~ViewWindow();
 
-        //! Open a page from current chm archive
-        bool	openUrl (const QUrl& url );
+		//! Open a page from current chm archive
+		bool	openUrl ( const QUrl& url );
 
-        QUrl	getOpenedPage() const	{ return url(); }
-        QUrl	getNewTabLink() const	{ return m_newTabLinkKeeper; }
+		QUrl	getOpenedPage() const
+		{
+			return url();
+		}
+		QUrl	getNewTabLink() const
+		{
+			return m_newTabLinkKeeper;
+		}
 
-    signals:
-        void    dataLoaded( ViewWindow * window );
+	signals:
+		void    dataLoaded( ViewWindow* window );
 
-        // This signal is emitted whenever the user clicks on a link.
-        void linkClicked(const QUrl &url);
+		// This signal is emitted whenever the user clicks on a link.
+		void linkClicked( const QUrl& url );
 
-    public:
-        // Apply the configuration settings (JS enabled etc) to the web renderer
-        static  void    applySettings();
+	public:
+		// Apply the configuration settings (JS enabled etc) to the web renderer
+		static  void    applySettings();
 
-        //! Invalidate current view, doing all the cleanups etc.
-        void	invalidate();
+		//! Invalidate current view, doing all the cleanups etc.
+		void	invalidate();
 
-        //! Popups the print dialog, and prints the current page on the printer.
-        bool	printCurrentPage();
+		//! Popups the print dialog, and prints the current page on the printer.
+		bool	printCurrentPage();
 
-        //! Return current ZoomFactor.
-        qreal	getZoomFactor() const;
+		//! Return current ZoomFactor.
+		qreal	getZoomFactor() const;
 
-        //! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
-        void	setZoomFactor( qreal zoom );
+		//! Sets ZoomFactor. The value returned by getZoomFactor(), given to this function, should give the same result.
+		void	setZoomFactor( qreal zoom );
 
-        /*!
-        * Return current scrollbar position in view window. Saved on program exit.
-        * There is no restriction on returned value, except that giving this value to
-        * setScrollbarPosition() should move the scrollbar in the same position.
-        */
-        int		getScrollbarPosition();
+		/*!
+		* Return current scrollbar position in view window. Saved on program exit.
+		* There is no restriction on returned value, except that giving this value to
+		* setScrollbarPosition() should move the scrollbar in the same position.
+		*/
+		int		getScrollbarPosition();
 
-        //! Sets the scrollbar position.
-        void	setScrollbarPosition(int pos, bool force = false);
+		//! Sets the scrollbar position.
+		void	setScrollbarPosition( int pos, bool force = false );
 
-        //! Select the content of the whole page
-        void	clipSelectAll();
+		//! Select the content of the whole page
+		void	clipSelectAll();
 
-        //! Copies the selected content to the clipboard
-        void	clipCopy();
+		//! Copies the selected content to the clipboard
+		void	clipCopy();
 
-        //! Updates the history toolbar icon status
-        void	updateHistoryIcons();
+		//! Updates the history toolbar icon status
+		void	updateHistoryIcons();
 
-        //! Returns the window title
-        QString	title() const;
+		//! Returns the window title
+		QString	title() const;
 
-        //! Navigation stuff
-        void	navigateBack();
-        void	navigateHome();
-        void	navigateForward();
+		//! Navigation stuff
+		void	navigateBack();
+		void	navigateHome();
+		void	navigateForward();
 
-        //! Keeps the tab URL between link following
-        void	setTabKeeper ( const QUrl& link );
+		//! Keeps the tab URL between link following
+		void	setTabKeeper ( const QUrl& link );
 
-    public slots:
-        void	zoomIncrease();
-        void	zoomDecrease();
+	public slots:
+		void	zoomIncrease();
+		void	zoomDecrease();
 
-    protected:
-        bool			openPage ( const QUrl& url );
-        void			handleStartPageAsImage( QUrl& link );
+	protected:
+		bool			openPage ( const QUrl& url );
+		void			handleStartPageAsImage( QUrl& link );
 
-        QMenu * 		getContextMenu( const QUrl& link, QWidget * parent );
-        QMenu * 		createStandardContextMenu( QWidget * parent );
+		QMenu* 		getContextMenu( const QUrl& link, QWidget* parent );
+		QMenu* 		createStandardContextMenu( QWidget* parent );
 
-        // Overriden to change the source
-        void			setSource ( const QUrl & name );
+		// Overriden to change the source
+		void			setSource ( const QUrl& name );
 
-        // Overloaded to provide custom context menu
-        void 			contextMenuEvent( QContextMenuEvent *e );
-        void            showContextMenu(const QPoint *point, const QString link);
-        //void			mouseReleaseEvent ( QMouseEvent * event );
+		// Overloaded to provide custom context menu
+		void 			contextMenuEvent( QContextMenuEvent* e );
+		void            showContextMenu( const QPoint* point, const QString link );
+		//void			mouseReleaseEvent ( QMouseEvent * event );
 
-    private slots:
-        // Used to restore the scrollbar position and the navigation button status
-        void			onLoadFinished ( bool ok );
-        void            onLinkClicked(const QUrl &url);
+	private slots:
+		// Used to restore the scrollbar position and the navigation button status
+		void			onLoadFinished ( bool ok );
+		void            onLinkClicked( const QUrl& url );
 
-    private:
-        QMenu 				*	m_contextMenu;
-        QMenu 				*	m_contextMenuLink;
+	private:
+		QMenu* 					m_contextMenu;
+		QMenu* 					m_contextMenuLink;
 
-        // This member keeps a "open new tab" link between getContextMenu()
-        // call and appropriate slot call
-        QUrl					m_newTabLinkKeeper;
+		// This member keeps a "open new tab" link between getContextMenu()
+		// call and appropriate slot call
+		QUrl					m_newTabLinkKeeper;
 
-        // Keeps the scrollbar position to move after the page is loaded
-        int						m_storedScrollbarPosition;
+		// Keeps the scrollbar position to move after the page is loaded
+		int						m_storedScrollbarPosition;
 };
 
 #endif // QTWEBENGINE_VIEWWINDOW_H

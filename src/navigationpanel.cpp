@@ -25,7 +25,7 @@
 #include "mainwindow.h"
 
 
-NavigationPanel::NavigationPanel( QWidget * parent )
+NavigationPanel::NavigationPanel( QWidget* parent )
 	: QDockWidget( parent ), Ui::NavigatorPanel()
 {
 	setupUi( this );
@@ -34,18 +34,18 @@ NavigationPanel::NavigationPanel( QWidget * parent )
 	m_tabWidget->clear();
 
 	// Add the required tabs
-	m_searchTab = new TabSearch(m_tabWidget);
+	m_searchTab = new TabSearch( m_tabWidget );
 	m_tabWidget->addTab( m_searchTab, i18n( "Search" ) );
 
 	m_bookmarksTab = new TabBookmarks( m_tabWidget );
-	m_tabWidget->addTab( m_bookmarksTab, i18n("Bookmarks") );
+	m_tabWidget->addTab( m_bookmarksTab, i18n( "Bookmarks" ) );
 
 	// Those tabs will be added later
 	m_contentsTab = 0;
 	m_indexTab = 0;
 }
 
-void NavigationPanel::setBookmarkMenu( QMenu * menu )
+void NavigationPanel::setBookmarkMenu( QMenu* menu )
 {
 	m_bookmarksTab->createMenu( menu );
 }
@@ -70,31 +70,31 @@ void NavigationPanel::invalidate()
 	m_bookmarksTab->invalidate();
 }
 
-void NavigationPanel::updateTabs( EBook * file )
+void NavigationPanel::updateTabs( EBook* file )
 {
 	invalidate();
 
 	// Insert index first
-	if ( file->hasFeature( EBook::FEATURE_INDEX) )
+	if ( file->hasFeature( EBook::FEATURE_INDEX ) )
 	{
-		m_indexTab = new TabIndex(m_tabWidget);
+		m_indexTab = new TabIndex( m_tabWidget );
 		m_tabWidget->insertTab( 0, m_indexTab, i18n( "Index" ) );
 	}
 
-	if ( file->hasFeature( EBook::FEATURE_TOC) )
+	if ( file->hasFeature( EBook::FEATURE_TOC ) )
 	{
 		m_contentsTab = new TabContents( m_tabWidget );
 		m_tabWidget->insertTab( 0, m_contentsTab, i18n( "Contents" ) );
 	}
 }
 
-void NavigationPanel::applySettings( Settings * settings )
+void NavigationPanel::applySettings( Settings* settings )
 {
 	m_searchTab->restoreSettings( settings->m_searchhistory );
 	m_bookmarksTab->restoreSettings( settings->m_bookmarks );
 }
 
-void NavigationPanel::getSettings( Settings * settings )
+void NavigationPanel::getSettings( Settings* settings )
 {
 	m_searchTab->saveSettings( settings->m_searchhistory );
 	m_bookmarksTab->saveSettings( settings->m_bookmarks );
@@ -111,13 +111,14 @@ bool NavigationPanel::findUrlInContents( const QUrl& url )
 	if ( !m_contentsTab )
 		return false;
 
-	TreeItem_TOC * treeitem = m_contentsTab->getTreeItem( url );
+	TreeItem_TOC* treeitem = m_contentsTab->getTreeItem( url );
 
 	if ( treeitem )
 	{
-		TreeItem_TOC * itemparent = treeitem;
-		while ( (itemparent = (TreeItem_TOC*) itemparent->parent()) != 0 )
-			itemparent->setExpanded(true);
+		TreeItem_TOC* itemparent = treeitem;
+
+		while ( ( itemparent = ( TreeItem_TOC* ) itemparent->parent() ) != 0 )
+			itemparent->setExpanded( true );
 
 		m_contentsTab->showItem( treeitem );
 		return true;
@@ -137,7 +138,7 @@ void NavigationPanel::showPrevInToc()
 		return;
 
 	// Try to find current list item
-	TreeItem_TOC * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
+	TreeItem_TOC* current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -146,7 +147,7 @@ void NavigationPanel::showPrevInToc()
 	lit--;
 
 	if ( *lit )
-		::mainWindow->openPage( ((TreeItem_TOC *) (*lit) )->getUrl(), MainWindow::OPF_CONTENT_TREE );
+		::mainWindow->openPage( ( ( TreeItem_TOC* ) ( *lit ) )->getUrl(), MainWindow::OPF_CONTENT_TREE );
 }
 
 void NavigationPanel::showNextInToc()
@@ -155,7 +156,7 @@ void NavigationPanel::showNextInToc()
 		return;
 
 	// Try to find current list item
-	TreeItem_TOC * current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
+	TreeItem_TOC* current = m_contentsTab->getTreeItem( ::mainWindow->currentBrowser()->getOpenedPage() );
 
 	if ( !current )
 		return;
@@ -164,13 +165,13 @@ void NavigationPanel::showNextInToc()
 	lit++;
 
 	if ( *lit )
-		::mainWindow->openPage( ((TreeItem_TOC *) (*lit) )->getUrl(),MainWindow::OPF_CONTENT_TREE );
+		::mainWindow->openPage( ( ( TreeItem_TOC* ) ( *lit ) )->getUrl(), MainWindow::OPF_CONTENT_TREE );
 }
 
 
 int	NavigationPanel::active() const
 {
-	QWidget * cur = m_tabWidget->currentWidget();
+	QWidget* cur = m_tabWidget->currentWidget();
 
 	if ( cur == m_bookmarksTab )
 		return TAB_BOOKMARK;
@@ -186,36 +187,37 @@ void NavigationPanel::setActive( int index )
 {
 	switch ( index )
 	{
-		case TAB_CONTENTS:
-			if ( m_contentsTab )
-			{
-				m_tabWidget->setCurrentWidget( m_contentsTab );
-				m_contentsTab->focus();
-			}
-			break;
+	case TAB_CONTENTS:
+		if ( m_contentsTab )
+		{
+			m_tabWidget->setCurrentWidget( m_contentsTab );
+			m_contentsTab->focus();
+		}
 
-		case TAB_INDEX:
-			if ( m_indexTab )
-			{
-				m_tabWidget->setCurrentWidget( m_indexTab );
-				m_indexTab->focus();
-			}
+		break;
 
-			break;
+	case TAB_INDEX:
+		if ( m_indexTab )
+		{
+			m_tabWidget->setCurrentWidget( m_indexTab );
+			m_indexTab->focus();
+		}
 
-		case TAB_SEARCH:
-			m_tabWidget->setCurrentWidget( m_searchTab );
-			m_searchTab->focus();
-			break;
+		break;
 
-		case TAB_BOOKMARK:
-			m_tabWidget->setCurrentWidget( m_bookmarksTab );
-			m_bookmarksTab->focus();
-			break;
+	case TAB_SEARCH:
+		m_tabWidget->setCurrentWidget( m_searchTab );
+		m_searchTab->focus();
+		break;
+
+	case TAB_BOOKMARK:
+		m_tabWidget->setCurrentWidget( m_bookmarksTab );
+		m_bookmarksTab->focus();
+		break;
 	}
 }
 
-void NavigationPanel::findTextInContents( const QString & text )
+void NavigationPanel::findTextInContents( const QString& text )
 {
 	if ( m_contentsTab )
 		m_contentsTab->search( text );
@@ -238,7 +240,7 @@ QStringList NavigationPanel::searchQuery( const QString& text )
 	QStringList result;
 	m_searchTab->searchQuery( text, &res );
 
-	Q_FOREACH( QUrl u, res )
+	Q_FOREACH ( QUrl u, res )
 		result.push_back( u.path() );
 
 	return result;
