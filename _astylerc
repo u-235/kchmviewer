@@ -1,0 +1,31 @@
+# astyle version 3.1
+# astyle --project "src/*.cpp" "src/*.h" "lib/libebook/*.cpp" "lib/libebook/*.h"
+
+--style=allman
+--max-code-length=120
+
+# Indents
+--indent=tab=4
+--indent=force-tab
+--indent-classes
+--indent-col1-comments
+--max-instatement-indent=40
+--min-conditional-indent=2
+--indent-preproc-block
+--indent-preproc-define
+
+--break-blocks
+--break-one-line-headers
+
+--pad-oper
+--pad-comma
+--pad-header
+--pad-paren-in
+
+--align-pointer=type
+--align-reference=type
+
+--recursive
+--suffix=none
+--exclude=bitfiddle.h
+--ignore-exclude-errors-x
