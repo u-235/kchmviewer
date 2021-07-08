@@ -166,7 +166,7 @@ QString EBook_EPUB::currentEncoding() const
 
 bool EBook_EPUB::setCurrentEncoding(const char *)
 {
-	abort();
+	return false;
 }
 
 bool EBook_EPUB::isSupportedUrl(const QUrl &url)

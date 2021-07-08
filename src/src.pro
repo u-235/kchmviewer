@@ -93,9 +93,7 @@ macx:{
     HEADERS += kchmviewerapp.h
     SOURCES += kchmviewerapp.cpp
     QMAKE_INFO_PLIST=resources/Info.plist
-    QMAKE_POST_LINK += cp resources/*.icns ${DESTDIR}/kchmviewer.app/Contents/Resources;
-    #LIBS *= ../lib/libebook/libebook.a
-    #POST_TARGETDEPS += ../lib/libebook/libebook.a
+    ICON = resources/kchmviewer.icns
 }
 
 win32:{

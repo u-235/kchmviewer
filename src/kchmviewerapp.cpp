@@ -63,5 +63,5 @@ void KchmviewerApp::onTimer()
         ++m_nResend;
         return;
     }
-    main->loadFile(m_filePath);
+    main->actionOpenRecentFile(m_filePath);
 }

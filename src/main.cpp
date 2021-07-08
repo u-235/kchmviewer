@@ -31,7 +31,7 @@
 	#include <kaboutdata.h>
 #endif
 
-#if defined (Q_WS_MAC)
+#if defined (Q_OS_MAC)
         #include "kchmviewerapp.h"
 #else
         typedef QApplication  KchmviewerApp;

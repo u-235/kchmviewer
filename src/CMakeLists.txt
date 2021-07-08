@@ -78,6 +78,12 @@ else ()
     set(QT_WEB_PACKAGE Qt::WebKit Qt::WebKitWidgets)
 endif ()
 
+# Mac OS specific
+if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "Darwin")
+    set(CPP_SOURCES ${CPP_SOURCES} kchmviewerapp.cpp)
+    set(MOC_HEADERS ${MOC_HEADERS} kchmviewerapp.h)
+endif ()
+
 qt_add_resources(RSRCS resources/images.qrc)
 
 if (${KDE4_FOUND})
